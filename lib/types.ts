@@ -37,7 +37,6 @@ export type SavedLocation = {
   lat: number;
   lon: number;
 };
-
 export type Settings = {
   temperatureUnit: 'c' | 'f';
   measurementSystem: 'metric' | 'imperial';
