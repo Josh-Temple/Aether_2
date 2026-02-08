@@ -16,6 +16,10 @@ export type WeatherSnapshot = {
   temperatureF: number;
   feelsLikeC: number;
   feelsLikeF: number;
+  maxTempC: number;
+  maxTempF: number;
+  minTempC: number;
+  minTempF: number;
   humidity: number;
   windKph: number;
   windMph: number;

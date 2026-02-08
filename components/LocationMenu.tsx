@@ -11,6 +11,7 @@ export function LocationMenu({
   savedLocations,
   onSelect,
   onMove,
+  onDelete,
   onOpenSettings,
 }: {
   open: boolean;
@@ -19,6 +20,7 @@ export function LocationMenu({
   savedLocations: SavedLocation[];
   onSelect: (location: SavedLocation | 'current') => void;
   onMove: (id: string, direction: 'up' | 'down') => void;
+  onDelete: (id: string) => void;
   onOpenSettings: () => void;
 }) {
   return (
@@ -77,6 +79,13 @@ export function LocationMenu({
                   className="text-[10px] uppercase tracking-[0.2em] text-white/60 disabled:opacity-30"
                 >
                   Down
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onDelete(location.id)}
+                  className="text-[10px] uppercase tracking-[0.2em] text-rose-200/80"
+                >
+                  Delete
                 </button>
               </div>
             </div>
