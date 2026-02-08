@@ -28,32 +28,17 @@ export function saveSavedLocations(locations: SavedLocation[]): void {
 }
 
 export function loadSettings(): Settings {
-  const defaults: Settings = {
-    temperatureUnit: 'c',
-    measurementSystem: 'metric',
-    timeFormat: '24h',
-    developerMode: false,
-    developerOverrides: { temperatureC: 22, highC: 26, lowC: 18, condition: 'clear' },
-  };
   if (typeof window === 'undefined') {
-    return defaults;
+    return { temperatureUnit: 'c', measurementSystem: 'metric', timeFormat: '24h' };
   }
   const raw = window.localStorage.getItem(SETTINGS_KEY);
   if (!raw) {
-    return defaults;
+    return { temperatureUnit: 'c', measurementSystem: 'metric', timeFormat: '24h' };
   }
   try {
-    const parsed = JSON.parse(raw) as Partial<Settings>;
-    return {
-      ...defaults,
-      ...parsed,
-      developerOverrides: {
-        ...defaults.developerOverrides,
-        ...parsed.developerOverrides,
-      },
-    };
+    return JSON.parse(raw) as Settings;
   } catch {
-    return defaults;
+    return { temperatureUnit: 'c', measurementSystem: 'metric', timeFormat: '24h' };
   }
 }
 

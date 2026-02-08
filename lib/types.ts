@@ -14,10 +14,6 @@ export type WeatherSnapshot = {
   lon: number;
   temperatureC: number;
   temperatureF: number;
-  maxTempC: number;
-  maxTempF: number;
-  minTempC: number;
-  minTempF: number;
   feelsLikeC: number;
   feelsLikeF: number;
   humidity: number;
@@ -41,16 +37,8 @@ export type SavedLocation = {
   lat: number;
   lon: number;
 };
-
 export type Settings = {
   temperatureUnit: 'c' | 'f';
   measurementSystem: 'metric' | 'imperial';
   timeFormat: '24h' | '12h';
-  developerMode: boolean;
-  developerOverrides: {
-    temperatureC: number;
-    highC: number;
-    lowC: number;
-    condition: WeatherCategory;
-  };
 };

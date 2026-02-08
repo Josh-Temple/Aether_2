@@ -6,13 +6,6 @@ export function formatTemperature(snapshot: WeatherSnapshot | null, settings: Se
   return `${Math.round(value)}°`;
 }
 
-export function formatRange(snapshot: WeatherSnapshot | null, settings: Settings): string {
-  if (!snapshot) return '-- / --';
-  const high = settings.temperatureUnit === 'c' ? snapshot.maxTempC : snapshot.maxTempF;
-  const low = settings.temperatureUnit === 'c' ? snapshot.minTempC : snapshot.minTempF;
-  return `${Math.round(high)}° / ${Math.round(low)}°`;
-}
-
 export function detailValue(
   snapshot: WeatherSnapshot,
   settings: Settings,

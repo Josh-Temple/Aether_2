@@ -33,7 +33,6 @@ export async function fetchCurrentWeather(params: {
     throw new Error('Failed');
   }
   const data = await response.json();
-  const forecastDay = data.forecast?.forecastday?.[0]?.day;
   return {
     locationName: data.location.name,
     region: data.location.region,
@@ -42,10 +41,6 @@ export async function fetchCurrentWeather(params: {
     lon: data.location.lon,
     temperatureC: data.current.temp_c,
     temperatureF: data.current.temp_f,
-    maxTempC: forecastDay?.maxtemp_c ?? data.current.temp_c,
-    maxTempF: forecastDay?.maxtemp_f ?? data.current.temp_f,
-    minTempC: forecastDay?.mintemp_c ?? data.current.temp_c,
-    minTempF: forecastDay?.mintemp_f ?? data.current.temp_f,
     feelsLikeC: data.current.feelslike_c,
     feelsLikeF: data.current.feelslike_f,
     humidity: data.current.humidity,

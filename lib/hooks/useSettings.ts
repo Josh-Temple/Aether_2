@@ -6,8 +6,6 @@ const DEFAULT_SETTINGS: Settings = {
   temperatureUnit: 'c',
   measurementSystem: 'metric',
   timeFormat: '24h',
-  developerMode: false,
-  developerOverrides: { temperatureC: 22, highC: 26, lowC: 18, condition: 'clear' },
 };
 
 export function useSettings() {

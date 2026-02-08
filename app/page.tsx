@@ -11,8 +11,8 @@ import { useSettings } from '../lib/hooks/useSettings';
 import { useSavedLocations } from '../lib/hooks/useSavedLocations';
 import { useActiveLocation } from '../lib/hooks/useActiveLocation';
 import { useWeatherData } from '../lib/hooks/useWeatherData';
-import type { SavedLocation, Settings, WeatherCategory, WeatherSnapshot } from '../lib/types';
-import { formatRange, formatTemperature } from '../lib/units';
+import type { SavedLocation, WeatherCategory } from '../lib/types';
+import { formatTemperature } from '../lib/units';
 
 const LIGHT_THEMES: WeatherCategory[] = ['cloudy', 'snow', 'fog'];
 
@@ -43,12 +43,8 @@ export default function HomePage() {
     return selectedLocation.name;
   }, [selectedLocation, snapshot]);
 
-  const displaySnapshot: WeatherSnapshot | null = settings.developerMode
-    ? createDeveloperSnapshot(settings, snapshot)
-    : snapshot;
-  const category = displaySnapshot?.category ?? 'cloudy';
-  const temperature = formatTemperature(displaySnapshot, settings);
-  const range = formatRange(displaySnapshot, settings);
+  const category = snapshot?.category ?? 'cloudy';
+  const temperature = formatTemperature(snapshot, settings);
   const textTone = LIGHT_THEMES.includes(category) ? 'text-black' : 'text-white';
 
   const currentIndicator = currentCoords ? `Current · ${snapshot?.locationName ?? 'Location'}` : 'Current location';
@@ -79,12 +75,6 @@ export default function HomePage() {
         savedLocations={savedLocations}
         onSelect={handleSelectLocation}
         onMove={handleReorder}
-        onDelete={(id) => {
-          setSavedLocations((prev) => prev.filter((item) => item.id !== id));
-          if (selectedLocation !== 'current' && selectedLocation.id === id) {
-            setSelectedLocation('current');
-          }
-        }}
         onOpenSettings={() => {
           setMenuOpen(false);
           setSettingsOpen(true);
@@ -115,61 +105,21 @@ export default function HomePage() {
         className="relative mt-10 flex w-full max-w-md flex-1 flex-col items-center justify-center"
         {...swipeHandlers}
       >
-        <div className={`weather-stage w-full ${`theme-${category}`}`}>
+        <div className={`weather-stage h-[60vh] w-full overflow-hidden ${`theme-${category}`}`}>
           <WeatherVisual category={category} />
           <div className={`relative z-10 flex h-full flex-col items-center justify-center ${textTone}`}>
             <div className="text-[11px] uppercase tracking-[0.3em] opacity-70">
-              {displaySnapshot ? conditionLabel(category) : '...'}
+              {snapshot ? conditionLabel(category) : '...'}
             </div>
             <div className="mt-6 text-6xl font-light">
-              {loading && !displaySnapshot ? <div className="skeleton h-16 w-32" /> : temperature}
+              {loading && !snapshot ? <div className="skeleton h-16 w-32" /> : temperature}
             </div>
-            <div className="mt-4 text-xs uppercase tracking-[0.3em] opacity-60">{range}</div>
           </div>
         </div>
-        {statusText && !settings.developerMode && (
-          <div className="mt-4 text-xs uppercase tracking-[0.3em] text-white/60">{statusText}</div>
-        )}
+        {statusText && <div className="mt-4 text-xs uppercase tracking-[0.3em] text-white/60">{statusText}</div>}
       </main>
 
       <div className="mb-6 text-[10px] uppercase tracking-[0.4em] text-white/30">Swipe left</div>
     </div>
   );
-}
-
-function cToF(value: number) {
-  return value * 1.8 + 32;
-}
-
-function createDeveloperSnapshot(settings: Settings, baseSnapshot: WeatherSnapshot | null): WeatherSnapshot {
-  const overrides = settings.developerOverrides;
-  const temperatureF = cToF(overrides.temperatureC);
-  const maxTempF = cToF(overrides.highC);
-  const minTempF = cToF(overrides.lowC);
-  return {
-    locationName: baseSnapshot?.locationName ?? 'Preview',
-    region: baseSnapshot?.region,
-    country: baseSnapshot?.country,
-    lat: baseSnapshot?.lat ?? 0,
-    lon: baseSnapshot?.lon ?? 0,
-    temperatureC: overrides.temperatureC,
-    temperatureF,
-    maxTempC: overrides.highC,
-    maxTempF,
-    minTempC: overrides.lowC,
-    minTempF,
-    feelsLikeC: overrides.temperatureC,
-    feelsLikeF: temperatureF,
-    humidity: baseSnapshot?.humidity ?? 55,
-    windKph: baseSnapshot?.windKph ?? 12,
-    windMph: baseSnapshot?.windMph ?? 7,
-    precipMm: baseSnapshot?.precipMm ?? 0,
-    precipIn: baseSnapshot?.precipIn ?? 0,
-    uv: baseSnapshot?.uv ?? 4,
-    visibilityKm: baseSnapshot?.visibilityKm ?? 10,
-    visibilityMiles: baseSnapshot?.visibilityMiles ?? 6,
-    conditionText: conditionLabel(overrides.condition),
-    category: overrides.condition,
-    updatedAt: baseSnapshot?.updatedAt ?? new Date().toISOString(),
-  };
 }
