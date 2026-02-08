@@ -46,6 +46,12 @@ export default function HomePage() {
   const category = snapshot?.category ?? 'cloudy';
   const temperature = formatTemperature(snapshot, settings);
   const textTone = LIGHT_THEMES.includes(category) ? 'text-black' : 'text-white';
+  const maxTemperature = snapshot
+    ? Math.round(settings.temperatureUnit === 'c' ? snapshot.maxTempC : snapshot.maxTempF)
+    : null;
+  const minTemperature = snapshot
+    ? Math.round(settings.temperatureUnit === 'c' ? snapshot.minTempC : snapshot.minTempF)
+    : null;
 
   const currentIndicator = currentCoords ? `Current · ${snapshot?.locationName ?? 'Location'}` : 'Current location';
 
@@ -66,8 +72,15 @@ export default function HomePage() {
     });
   }
 
+  function handleDelete(id: string) {
+    setSavedLocations((prev) => prev.filter((item) => item.id !== id));
+    if (selectedLocation !== 'current' && selectedLocation.id === id) {
+      setSelectedLocation('current');
+    }
+  }
+
   return (
-    <div className="app-shell flex min-h-screen flex-col items-center justify-between p-6">
+    <div className="app-shell flex min-h-screen flex-col">
       <LocationMenu
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
@@ -75,6 +88,7 @@ export default function HomePage() {
         savedLocations={savedLocations}
         onSelect={handleSelectLocation}
         onMove={handleReorder}
+        onDelete={handleDelete}
         onOpenSettings={() => {
           setMenuOpen(false);
           setSettingsOpen(true);
@@ -93,33 +107,38 @@ export default function HomePage() {
         settings={settings}
       />
 
-      <button
-        type="button"
-        onClick={() => setMenuOpen(true)}
-        className="mt-4 text-center text-sm text-white/80"
-      >
-        {activeLabel}
-      </button>
-
-      <main
-        className="relative mt-10 flex w-full max-w-md flex-1 flex-col items-center justify-center"
-        {...swipeHandlers}
-      >
-        <div className={`weather-stage h-[60vh] w-full overflow-hidden ${`theme-${category}`}`}>
+      <main className="relative flex flex-1 flex-col" {...swipeHandlers}>
+        <div className={`weather-stage absolute inset-0 ${`theme-${category}`}`}>
           <WeatherVisual category={category} />
-          <div className={`relative z-10 flex h-full flex-col items-center justify-center ${textTone}`}>
+        </div>
+        <div className={`relative z-10 flex flex-1 flex-col items-center justify-between px-6 py-8 ${textTone}`}>
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            className="text-center text-sm"
+          >
+            {activeLabel}
+          </button>
+          <div className="flex flex-col items-center">
             <div className="text-[11px] uppercase tracking-[0.3em] opacity-70">
               {snapshot ? conditionLabel(category) : '...'}
             </div>
             <div className="mt-6 text-6xl font-light">
               {loading && !snapshot ? <div className="skeleton h-16 w-32" /> : temperature}
             </div>
+            <div className="mt-4 flex items-center gap-4 text-xs uppercase tracking-[0.3em] opacity-70">
+              <span>Max {maxTemperature ?? '--'}°</span>
+              <span>Min {minTemperature ?? '--'}°</span>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            {statusText && (
+              <div className="text-xs uppercase tracking-[0.3em] text-white/60">{statusText}</div>
+            )}
+            <div className="text-[10px] uppercase tracking-[0.4em] text-white/30">Swipe left</div>
           </div>
         </div>
-        {statusText && <div className="mt-4 text-xs uppercase tracking-[0.3em] text-white/60">{statusText}</div>}
       </main>
-
-      <div className="mb-6 text-[10px] uppercase tracking-[0.4em] text-white/30">Swipe left</div>
     </div>
   );
 }

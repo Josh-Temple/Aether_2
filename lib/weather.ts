@@ -33,6 +33,11 @@ export async function fetchCurrentWeather(params: {
     throw new Error('Failed');
   }
   const data = await response.json();
+  const forecastDay = data.forecast?.forecastday?.[0]?.day;
+  const maxTempC = typeof forecastDay?.maxtemp_c === 'number' ? forecastDay.maxtemp_c : data.current.temp_c;
+  const maxTempF = typeof forecastDay?.maxtemp_f === 'number' ? forecastDay.maxtemp_f : data.current.temp_f;
+  const minTempC = typeof forecastDay?.mintemp_c === 'number' ? forecastDay.mintemp_c : data.current.temp_c;
+  const minTempF = typeof forecastDay?.mintemp_f === 'number' ? forecastDay.mintemp_f : data.current.temp_f;
   return {
     locationName: data.location.name,
     region: data.location.region,
@@ -43,6 +48,10 @@ export async function fetchCurrentWeather(params: {
     temperatureF: data.current.temp_f,
     feelsLikeC: data.current.feelslike_c,
     feelsLikeF: data.current.feelslike_f,
+    maxTempC,
+    maxTempF,
+    minTempC,
+    minTempF,
     humidity: data.current.humidity,
     windKph: data.current.wind_kph,
     windMph: data.current.wind_mph,
