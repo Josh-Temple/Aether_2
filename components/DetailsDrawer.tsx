@@ -17,6 +17,16 @@ export function DetailsDrawer({
   settings: Settings;
 }) {
   const swipeHandlers = useSwipe(() => undefined, onClose);
+  const detailItems = snapshot
+    ? [
+        { label: 'Hum', value: `${snapshot.humidity}%` },
+        { label: 'Wind', value: detailValue(snapshot, settings, 'wind') },
+        { label: 'Feels', value: detailValue(snapshot, settings, 'feels') },
+        { label: 'Rain', value: detailValue(snapshot, settings, 'rain') },
+        { label: 'UV', value: `${snapshot.uv}` },
+        { label: 'Vis', value: detailValue(snapshot, settings, 'vis') },
+      ]
+    : [];
 
   return (
     <div
@@ -35,15 +45,10 @@ export function DetailsDrawer({
       >
         <div className="text-xs uppercase tracking-[0.3em] text-white/40">Details</div>
         <div className="mt-8 grid gap-4">
-          {snapshot ? (
-            <>
-              <DetailItem label="Hum" value={`${snapshot.humidity}%`} />
-              <DetailItem label="Wind" value={detailValue(snapshot, settings, 'wind')} />
-              <DetailItem label="Feels" value={detailValue(snapshot, settings, 'feels')} />
-              <DetailItem label="Rain" value={detailValue(snapshot, settings, 'rain')} />
-              <DetailItem label="UV" value={`${snapshot.uv}`} />
-              <DetailItem label="Vis" value={detailValue(snapshot, settings, 'vis')} />
-            </>
+          {detailItems.length ? (
+            detailItems.map((item) => (
+              <DetailItem key={item.label} label={item.label} value={item.value} />
+            ))
           ) : (
             <div className="text-sm text-white/60">No data</div>
           )}
