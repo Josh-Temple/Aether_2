@@ -42,7 +42,3 @@ WeatherAPI requests are made server-side via Next.js Route Handlers.
 - `lib/normalize.ts` — condition normalization to 6 categories.
 - `lib/storage.ts` — localStorage persistence for locations, settings, cache.
 - `components/*` — UI components (drawer, menu, visuals).
-
-## Contribution workflow (conflict reduction)
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the recommended workflow to reduce merge conflicts.

@@ -51,11 +51,6 @@ export default function SearchPage() {
       return;
     }
     const saved = toSaved(result);
-    if (savedLocations.some((item) => item.id === saved.id)) {
-      saveActiveLocationId(saved.id);
-      router.push('/');
-      return;
-    }
     const next = [...savedLocations, saved].slice(0, 3);
     setSavedLocations(next);
     saveSavedLocations(next);
