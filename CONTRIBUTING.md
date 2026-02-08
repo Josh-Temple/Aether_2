@@ -25,3 +25,11 @@
 - Ensure the Vercel build targets the latest commit on the intended branch.
 - Verify the commit SHA in the Vercel build log matches GitHub.
 
+
+## Optional Git helpers
+
+- Enable rerere (reuse recorded resolution) to auto-apply previously resolved conflicts:
+  ```bash
+  git config --global rerere.enabled true
+  ```
+- Prefer `git rebase origin/main` before opening a PR to keep conflict risk low.

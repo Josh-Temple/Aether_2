@@ -1,0 +1,8 @@
+# Reduce conflicts in documentation and templates
+*.md merge=union
+.github/pull_request_template.md merge=union
+
+# Treat lockfiles as text to minimize binary conflicts
+package-lock.json text
+pnpm-lock.yaml text
+yarn.lock text
