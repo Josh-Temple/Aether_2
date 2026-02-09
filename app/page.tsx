@@ -14,7 +14,7 @@ import { useWeatherData } from '../lib/hooks/useWeatherData';
 import type { SavedLocation, WeatherCategory } from '../lib/types';
 import { formatTemperature } from '../lib/units';
 
-const LIGHT_THEMES: WeatherCategory[] = ['cloudy', 'snow', 'fog'];
+const LIGHT_THEMES: WeatherCategory[] = ['clear', 'cloudy', 'snow', 'fog'];
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,7 +45,7 @@ export default function HomePage() {
 
   const category = snapshot?.category ?? 'cloudy';
   const temperature = formatTemperature(snapshot, settings);
-  const textTone = LIGHT_THEMES.includes(category) ? 'text-black' : 'text-white';
+  const textTone = LIGHT_THEMES.includes(category) ? 'text-slate-900 weather-text-light' : 'text-white weather-text-dark';
   const maxTemperature = snapshot
     ? Math.round(settings.temperatureUnit === 'c' ? snapshot.maxTempC : snapshot.maxTempF)
     : null;
