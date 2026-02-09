@@ -36,7 +36,7 @@ export default function SearchPage() {
 
   function toSaved(result: WeatherSearchResult): SavedLocation {
     return {
-      id: `${result.name}-${result.lat.toFixed(3)}-${result.lon.toFixed(3)}`,
+      id: result.id,
       name: result.name,
       region: result.region,
       country: result.country,
@@ -92,7 +92,7 @@ export default function SearchPage() {
       <div className="mt-8 space-y-3">
         {results.map((result) => (
           <button
-            key={`${result.name}-${result.lat}`}
+            key={result.id}
             type="button"
             onClick={() => handleSelect(result)}
             className="flex w-full flex-col gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left"
