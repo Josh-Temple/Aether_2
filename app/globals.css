@@ -16,7 +16,6 @@ body {
 }
 
 .weather-stage {
-  position: relative;
   overflow: hidden;
   border-radius: 0;
 }
