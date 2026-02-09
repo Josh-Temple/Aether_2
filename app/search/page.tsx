@@ -46,12 +46,19 @@ export default function SearchPage() {
   }
 
   function handleSelect(result: WeatherSearchResult) {
-    if (limitReached) {
+    const saved = toSaved(result);
+    const current = loadSavedLocations();
+    const existing = current.find((item) => item.id === saved.id);
+    if (existing) {
+      saveActiveLocationId(saved.id);
+      router.push('/');
+      return;
+    }
+    if (current.length >= 3) {
       setPending(result);
       return;
     }
-    const saved = toSaved(result);
-    const next = [...savedLocations, saved].slice(0, 3);
+    const next = [...current, saved].slice(0, 3);
     setSavedLocations(next);
     saveSavedLocations(next);
     saveActiveLocationId(saved.id);
@@ -61,7 +68,8 @@ export default function SearchPage() {
   function handleReplace(targetId: string) {
     if (!pending) return;
     const saved = toSaved(pending);
-    const next = savedLocations.map((item) => (item.id === targetId ? saved : item));
+    const current = loadSavedLocations();
+    const next = current.map((item) => (item.id === targetId ? saved : item));
     setSavedLocations(next);
     saveSavedLocations(next);
     saveActiveLocationId(saved.id);

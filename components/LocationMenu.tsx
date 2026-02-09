@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { SavedLocation } from '../lib/types';
 
 export function LocationMenu({
@@ -23,6 +23,8 @@ export function LocationMenu({
   onDelete: (id: string) => void;
   onOpenSettings: () => void;
 }) {
+  const router = useRouter();
+
   return (
     <div
       className={clsx(
@@ -90,12 +92,16 @@ export function LocationMenu({
               </div>
             </div>
           ))}
-          <Link
-            href="/search"
-            className="block rounded-2xl border border-dashed border-white/30 px-4 py-3 text-center text-xs uppercase tracking-[0.3em] text-white/60"
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              router.push('/search');
+            }}
+            className="block w-full rounded-2xl border border-dashed border-white/30 px-4 py-3 text-center text-xs uppercase tracking-[0.3em] text-white/60"
           >
             Add location
-          </Link>
+          </button>
         </div>
       </div>
     </div>
