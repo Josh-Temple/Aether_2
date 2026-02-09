@@ -24,7 +24,13 @@ export function useWeatherData({
       setStatusText(null);
       if (target === 'current') {
         if (!navigator.geolocation) {
-          setStatusText('No data');
+          const cached = getCachedWeather('current');
+          if (cached.data) {
+            setSnapshot(cached.data);
+            setStatusText('Offline');
+          } else {
+            setStatusText('No data');
+          }
           return;
         }
         setLoading(true);
@@ -39,6 +45,12 @@ export function useWeatherData({
           () => {
             if (cancelled) return;
             setLoading(false);
+            const cached = getCachedWeather('current');
+            if (cached.data) {
+              setSnapshot(cached.data);
+              setStatusText('Offline');
+              return;
+            }
             if (savedLocations.length === 0) {
               setStatusText('Add location');
             } else {
