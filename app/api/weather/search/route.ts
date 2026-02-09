@@ -21,8 +21,8 @@ export async function GET(request: Request) {
     name: item.name,
     region: item.region,
     country: item.country,
-    lat: item.lat,
-    lon: item.lon,
+    lat: Number(item.lat),
+    lon: Number(item.lon),
   }));
   return NextResponse.json(normalized, { status: 200 });
 }
