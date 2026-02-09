@@ -111,31 +111,31 @@ export default function HomePage() {
         <div className={`weather-stage absolute inset-0 ${`theme-${category}`}`}>
           <WeatherVisual category={category} />
         </div>
-        <div className={`relative z-10 flex flex-1 flex-col items-center justify-between px-6 py-8 ${textTone}`}>
+        <div className={`relative z-10 flex flex-1 flex-col justify-between px-6 py-10 ${textTone}`}>
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="text-center text-sm"
+            className="self-start text-left text-base font-medium"
           >
             {activeLabel}
           </button>
           <div className="flex flex-col items-center">
-            <div className="text-[11px] uppercase tracking-[0.3em] opacity-70">
-              {snapshot ? conditionLabel(category) : '...'}
-            </div>
-            <div className="mt-6 text-6xl font-light">
+            <div className="text-6xl font-light">
               {loading && !snapshot ? <div className="skeleton h-16 w-32" /> : temperature}
             </div>
-            <div className="mt-4 flex items-center gap-4 text-xs uppercase tracking-[0.3em] opacity-70">
+            <div className="mt-3 text-sm font-medium opacity-70">
+              {snapshot ? conditionLabel(category) : '...'}
+            </div>
+            <div className="mt-5 flex items-center gap-4 text-xs uppercase tracking-[0.3em] opacity-70">
               <span>Max {maxTemperature ?? '--'}°</span>
               <span>Min {minTemperature ?? '--'}°</span>
             </div>
           </div>
           <div className="flex flex-col items-center gap-2">
             {statusText && (
-              <div className="text-xs uppercase tracking-[0.3em] text-white/60">{statusText}</div>
+              <div className={`text-xs uppercase tracking-[0.3em] ${textTone} opacity-60`}>{statusText}</div>
             )}
-            <div className="text-[10px] uppercase tracking-[0.4em] text-white/30">Swipe left</div>
+            <div className={`text-[10px] uppercase tracking-[0.4em] ${textTone} opacity-30`}>Swipe left</div>
           </div>
         </div>
       </main>

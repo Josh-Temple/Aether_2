@@ -32,48 +32,64 @@ body {
   opacity: 0.7;
 }
 
+.visual-ring {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 191, 137, 0.7);
+  box-shadow: 0 0 16px rgba(226, 191, 137, 0.25);
+}
+
+.rain-streak {
+  position: absolute;
+  width: 1px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0) 0%, rgba(148, 163, 184, 0.8) 60%, rgba(148, 163, 184, 0) 100%);
+  filter: blur(0.3px);
+  opacity: 0.6;
+}
+
 .theme-clear {
-  background: radial-gradient(circle at top, #fef3c7 0%, #fbbf24 40%, #0f172a 100%);
+  background: linear-gradient(180deg, #fbf6ef 0%, #f7efe5 55%, #f2e8dc 100%);
 }
 
 .theme-cloudy {
-  background: #e5e7eb;
+  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 60%, #cbd5e1 100%);
 }
 
 .theme-cloudy .visual-layer {
-  background: #f3f4f6;
-}
-
-.theme-rain {
-  background: linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
-}
-
-.theme-rain .visual-layer {
-  background: rgba(148, 163, 184, 0.6);
-}
-
-.theme-snow {
-  background: linear-gradient(160deg, #e2e8f0 0%, #cbd5f5 50%, #f8fafc 100%);
-}
-
-.theme-snow .visual-layer {
   background: rgba(255, 255, 255, 0.8);
 }
 
+.theme-rain {
+  background: linear-gradient(160deg, #0b1220 0%, #192235 55%, #0b1220 100%);
+}
+
+.theme-rain .visual-layer {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+.theme-snow {
+  background: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 55%, #e5e7eb 100%);
+}
+
+.theme-snow .visual-layer {
+  background: rgba(255, 255, 255, 0.65);
+}
+
 .theme-thunder {
-  background: linear-gradient(140deg, #111827 0%, #1f2937 60%, #0f172a 100%);
+  background: linear-gradient(150deg, #0f172a 0%, #1f2937 55%, #0b1120 100%);
 }
 
 .theme-thunder .visual-layer {
-  background: rgba(251, 191, 36, 0.35);
+  background: rgba(148, 163, 184, 0.25);
 }
 
 .theme-fog {
-  background: linear-gradient(180deg, #d1d5db 0%, #9ca3af 70%, #6b7280 100%);
+  background: linear-gradient(180deg, #f3f4f6 0%, #d1d5db 60%, #9ca3af 100%);
 }
 
 .theme-fog .visual-layer {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .drawer-backdrop {
