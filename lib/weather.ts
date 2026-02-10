@@ -62,6 +62,7 @@ export async function fetchCurrentWeather(params: {
     visibilityMiles: data.current.vis_miles,
     conditionText: data.current.condition.text,
     category: normalizeCondition(data.current.condition.text),
+    isDay: data.current.is_day === 1,
     updatedAt: data.current.last_updated,
   } as WeatherSnapshot;
 }
