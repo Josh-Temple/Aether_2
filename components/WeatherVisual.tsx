@@ -34,12 +34,31 @@ const layers: Record<WeatherCategory, Array<{ className: string; style: CSSPrope
   ],
 };
 
-export function WeatherVisual({ category }: { category: WeatherCategory }) {
+const starLayers: Array<{ style: CSSProperties }> = [
+  { style: { width: '2px', height: '2px', top: '18%', left: '22%', animationDelay: '0s' } },
+  { style: { width: '2px', height: '2px', top: '14%', left: '38%', animationDelay: '1.2s' } },
+  { style: { width: '3px', height: '3px', top: '22%', left: '52%', animationDelay: '2.4s' } },
+  { style: { width: '2px', height: '2px', top: '28%', left: '68%', animationDelay: '0.8s' } },
+  { style: { width: '2px', height: '2px', top: '34%', left: '80%', animationDelay: '1.7s' } },
+  { style: { width: '3px', height: '3px', top: '10%', left: '74%', animationDelay: '2.9s' } },
+  { style: { width: '2px', height: '2px', top: '26%', left: '12%', animationDelay: '3.1s' } },
+  { style: { width: '2px', height: '2px', top: '30%', left: '42%', animationDelay: '1.9s' } },
+];
+
+export function WeatherVisual({ category, isNight }: { category: WeatherCategory; isNight: boolean }) {
+  const showStars = isNight && category === 'clear';
+  const showLightning = isNight && category === 'thunder';
+
   return (
     <div className="weather-visual">
-      {layers[category].map((layer, index) => (
-        <div key={index} className={layer.className} style={layer.style} />
-      ))}
+      {layers[category].map((layer, index) => {
+        const hideClearRingAtNight = category === 'clear' && isNight && layer.className === 'visual-ring';
+        if (hideClearRingAtNight) return null;
+        return <div key={index} className={layer.className} style={layer.style} />;
+      })}
+      {showStars &&
+        starLayers.map((star, index) => <div key={`star-${index}`} className="night-star" style={star.style} />)}
+      {showLightning && <div className="lightning-flash" />}
     </div>
   );
 }

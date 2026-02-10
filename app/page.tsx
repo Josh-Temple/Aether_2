@@ -44,8 +44,10 @@ export default function HomePage() {
   }, [selectedLocation, snapshot]);
 
   const category = snapshot?.category ?? 'cloudy';
+  const isNight = snapshot ? !snapshot.isDay : false;
+  const themeClass = `theme-${category}${isNight ? '-night' : ''}`;
   const temperature = formatTemperature(snapshot, settings);
-  const textTone = LIGHT_THEMES.includes(category) ? 'text-slate-900 weather-text-light' : 'text-white weather-text-dark';
+  const textTone = isNight || !LIGHT_THEMES.includes(category) ? 'text-white weather-text-dark' : 'text-slate-900 weather-text-light';
   const maxTemperature = snapshot
     ? Math.round(settings.temperatureUnit === 'c' ? snapshot.maxTempC : snapshot.maxTempF)
     : null;
@@ -108,8 +110,8 @@ export default function HomePage() {
       />
 
       <main className="relative flex flex-1 flex-col" {...swipeHandlers}>
-        <div className={`weather-stage absolute inset-0 ${`theme-${category}`}`}>
-          <WeatherVisual category={category} />
+        <div className={`weather-stage absolute inset-0 ${themeClass}`}>
+          <WeatherVisual category={category} isNight={isNight} />
         </div>
         <div className={`relative z-10 flex flex-1 flex-col justify-between px-6 py-10 ${textTone}`}>
           <button

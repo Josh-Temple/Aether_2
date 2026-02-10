@@ -30,6 +30,7 @@ export type WeatherSnapshot = {
   visibilityMiles: number;
   conditionText: string;
   category: WeatherCategory;
+  isDay: boolean;
   updatedAt: string;
 };
 
