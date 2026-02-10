@@ -25,10 +25,8 @@ export default function HomePage() {
   const { savedLocations, setSavedLocations } = useSavedLocations();
   const { selectedLocation, setSelectedLocation } = useActiveLocation(savedLocations);
 
-  const { snapshot, statusText, loading, currentCoords } = useWeatherData({
+  const { snapshot, statusText, loading } = useWeatherData({
     selectedLocation,
-    savedLocations,
-    onFallbackToSaved: (location) => setSelectedLocation(location),
   });
 
   const swipeHandlers = useSwipe(
@@ -37,11 +35,11 @@ export default function HomePage() {
   );
 
   const activeLabel = useMemo(() => {
-    if (selectedLocation === 'current') {
-      return snapshot?.locationName ? `Current · ${snapshot.locationName}` : 'Current location';
+    if (selectedLocation) {
+      return selectedLocation.name;
     }
-    return selectedLocation.name;
-  }, [selectedLocation, snapshot]);
+    return 'Add location';
+  }, [selectedLocation]);
 
   const category = snapshot?.category ?? 'cloudy';
   const isNight = snapshot ? !snapshot.isDay : false;
@@ -55,9 +53,7 @@ export default function HomePage() {
     ? Math.round(settings.temperatureUnit === 'c' ? snapshot.minTempC : snapshot.minTempF)
     : null;
 
-  const currentIndicator = currentCoords ? `Current · ${snapshot?.locationName ?? 'Location'}` : 'Current location';
-
-  function handleSelectLocation(location: SavedLocation | 'current') {
+  function handleSelectLocation(location: SavedLocation) {
     setMenuOpen(false);
     setSelectedLocation(location);
   }
@@ -75,9 +71,10 @@ export default function HomePage() {
   }
 
   function handleDelete(id: string) {
-    setSavedLocations((prev) => prev.filter((item) => item.id !== id));
-    if (selectedLocation !== 'current' && selectedLocation.id === id) {
-      setSelectedLocation('current');
+    const next = savedLocations.filter((item) => item.id !== id);
+    setSavedLocations(next);
+    if (selectedLocation?.id === id) {
+      setSelectedLocation(next[0] ?? null);
     }
   }
 
@@ -86,8 +83,8 @@ export default function HomePage() {
       <LocationMenu
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
-        currentLabel={currentIndicator}
         savedLocations={savedLocations}
+        selectedLocationId={selectedLocation?.id}
         onSelect={handleSelectLocation}
         onMove={handleReorder}
         onDelete={handleDelete}

@@ -3,7 +3,7 @@ import type { SavedLocation } from '../types';
 import { loadActiveLocationId, saveActiveLocationId } from '../storage';
 
 export function useActiveLocation(savedLocations: SavedLocation[]) {
-  const [selectedLocation, setSelectedLocation] = useState<SavedLocation | 'current'>('current');
+  const [selectedLocation, setSelectedLocation] = useState<SavedLocation | null>(null);
 
   useEffect(() => {
     const activeId = loadActiveLocationId();
@@ -11,15 +11,17 @@ export function useActiveLocation(savedLocations: SavedLocation[]) {
       const match = savedLocations.find((item) => item.id === activeId);
       if (match) {
         setSelectedLocation(match);
+        return;
       }
     }
+    setSelectedLocation(savedLocations[0] ?? null);
   }, [savedLocations]);
 
   useEffect(() => {
-    if (selectedLocation === 'current') {
-      saveActiveLocationId(null);
-    } else {
+    if (selectedLocation) {
       saveActiveLocationId(selectedLocation.id);
+    } else {
+      saveActiveLocationId(null);
     }
   }, [selectedLocation]);
 

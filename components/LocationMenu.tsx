@@ -7,8 +7,8 @@ import { SavedLocation } from '../lib/types';
 export function LocationMenu({
   open,
   onClose,
-  currentLabel,
   savedLocations,
+  selectedLocationId,
   onSelect,
   onMove,
   onDelete,
@@ -16,9 +16,9 @@ export function LocationMenu({
 }: {
   open: boolean;
   onClose: () => void;
-  currentLabel: string;
   savedLocations: SavedLocation[];
-  onSelect: (location: SavedLocation | 'current') => void;
+  selectedLocationId?: string;
+  onSelect: (location: SavedLocation) => void;
   onMove: (id: string, direction: 'up' | 'down') => void;
   onDelete: (id: string) => void;
   onOpenSettings: () => void;
@@ -45,14 +45,6 @@ export function LocationMenu({
           </button>
         </div>
         <div className="mt-5 space-y-3">
-          <button
-            type="button"
-            onClick={() => onSelect('current')}
-            className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left"
-          >
-            <span className="text-sm">{currentLabel}</span>
-            <span className="h-2 w-2 rounded-full bg-emerald-400/70" />
-          </button>
           {savedLocations.map((location, index) => (
             <div
               key={location.id}
@@ -61,11 +53,12 @@ export function LocationMenu({
               <button
                 type="button"
                 onClick={() => onSelect(location)}
-                className="flex-1 text-left text-sm"
+                className="flex flex-1 items-center justify-between text-left text-sm"
               >
-                {location.name}
+                <span>{location.name}</span>
+                {selectedLocationId === location.id && <span className="h-2 w-2 rounded-full bg-emerald-400/70" />}
               </button>
-              <div className="flex items-center gap-2">
+              <div className="ml-3 flex items-center gap-2">
                 <button
                   type="button"
                   disabled={index === 0}
