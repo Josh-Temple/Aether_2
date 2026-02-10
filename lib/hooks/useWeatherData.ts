@@ -5,61 +5,25 @@ import { getCachedWeather, setCachedWeather } from '../cache';
 
 export function useWeatherData({
   selectedLocation,
-  savedLocations,
-  onFallbackToSaved,
 }: {
-  selectedLocation: SavedLocation | 'current';
-  savedLocations: SavedLocation[];
-  onFallbackToSaved: (location: SavedLocation) => void;
+  selectedLocation: SavedLocation | null;
 }) {
   const [snapshot, setSnapshot] = useState<WeatherSnapshot | null>(null);
   const [statusText, setStatusText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [currentCoords, setCurrentCoords] = useState<{ lat: number; lon: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function resolveLocation(target: SavedLocation | 'current') {
+    async function resolveLocation(target: SavedLocation | null) {
       setStatusText(null);
-      if (target === 'current') {
-        if (!navigator.geolocation) {
-          const cached = getCachedWeather('current');
-          if (cached.data) {
-            setSnapshot(cached.data);
-            setStatusText('Offline');
-          } else {
-            setStatusText('No data');
-          }
-          return;
-        }
-        setLoading(true);
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            if (cancelled) return;
-            const coords = { lat: position.coords.latitude, lon: position.coords.longitude };
-            setCurrentCoords(coords);
-            await loadWeather({ id: 'current', ...coords });
-            if (!cancelled) setLoading(false);
-          },
-          () => {
-            if (cancelled) return;
-            setLoading(false);
-            const cached = getCachedWeather('current');
-            if (cached.data) {
-              setSnapshot(cached.data);
-              setStatusText('Offline');
-              return;
-            }
-            if (savedLocations.length === 0) {
-              setStatusText('Add location');
-            } else {
-              onFallbackToSaved(savedLocations[0]);
-            }
-          },
-        );
+
+      if (!target) {
+        setSnapshot(null);
+        setStatusText('Add location');
         return;
       }
+
       setLoading(true);
       await loadWeather({ id: target.id, lat: target.lat, lon: target.lon });
       if (!cancelled) setLoading(false);
@@ -94,7 +58,7 @@ export function useWeatherData({
     return () => {
       cancelled = true;
     };
-  }, [selectedLocation, savedLocations, onFallbackToSaved]);
+  }, [selectedLocation]);
 
-  return { snapshot, statusText, loading, currentCoords };
+  return { snapshot, statusText, loading };
 }
