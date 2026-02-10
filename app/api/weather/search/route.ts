@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   }
   const data = await response.json();
   const normalized = data.map((item: any) => ({
-    id: String(item.id ?? `${item.name}-${item.lat}`),
+    id: [item.name, item.region, item.country, item.lat, item.lon].map(String).join('|').toLowerCase(),
     name: item.name,
     region: item.region,
     country: item.country,
