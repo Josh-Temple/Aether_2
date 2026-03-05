@@ -32,6 +32,26 @@ export type WeatherSnapshot = {
   category: WeatherCategory;
   isDay: boolean;
   updatedAt: string;
+  dailyForecast: DailyForecast[];
+  hourlyForecast: HourlyForecastPoint[];
+};
+
+export type DailyForecast = {
+  date: string;
+  maxTempC: number;
+  maxTempF: number;
+  minTempC: number;
+  minTempF: number;
+  chanceOfRain: number;
+  chanceOfSnow: number;
+  conditionText: string;
+  category: WeatherCategory;
+};
+
+export type HourlyForecastPoint = {
+  time: string;
+  tempC: number;
+  tempF: number;
 };
 
 export type SavedLocation = {

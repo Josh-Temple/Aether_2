@@ -35,10 +35,14 @@ WeatherAPI requests are made server-side via Next.js Route Handlers.
 - **Caching:** Weather data is cached per location for 10 minutes in localStorage. Fresh cache avoids refetching.
 - **Offline fallback:** If a request fails, the app shows the last cached data and an `Offline` indicator. If no cache exists, it shows `No data`.
 - **Saved locations:** Up to 3 saved locations are stored locally with manual up/down reordering.
+- **Top screen forecast:** The main screen now shows a 24-hour temperature trend line and a 5-day forecast strip.
+- **Forecast depth:** Weather requests include up to 5 forecast days and use the first day hourly array for trend rendering.
 
 ## Project structure
 
 - `app/api/weather/*` — server proxy for WeatherAPI search/current endpoints.
+- `app/page.tsx` — main weather stage UI (current conditions + trend chart + multi-day strip).
 - `lib/normalize.ts` — condition normalization to 6 categories.
 - `lib/storage.ts` — localStorage persistence for locations, settings, cache.
+- `components/ForecastPanels.tsx` — extracted home forecast UI blocks (trend chart and 5-day strip).
 - `components/*` — UI components (drawer, menu, visuals).

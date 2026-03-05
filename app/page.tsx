@@ -5,6 +5,7 @@ import { LocationMenu } from '../components/LocationMenu';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { DetailsDrawer } from '../components/DetailsDrawer';
 import { WeatherVisual } from '../components/WeatherVisual';
+import { FiveDayForecastPanel, TemperatureTrendPanel } from '../components/ForecastPanels';
 import { conditionLabel } from '../lib/normalize';
 import { useSwipe } from '../lib/gestures';
 import { useSettings } from '../lib/hooks/useSettings';
@@ -52,6 +53,8 @@ export default function HomePage() {
   const minTemperature = snapshot
     ? Math.round(settings.temperatureUnit === 'c' ? snapshot.minTempC : snapshot.minTempF)
     : null;
+  const dailyForecast = snapshot?.dailyForecast ?? [];
+  const hourlyForecast = snapshot?.hourlyForecast ?? [];
 
   function handleSelectLocation(location: SavedLocation) {
     setMenuOpen(false);
@@ -129,6 +132,17 @@ export default function HomePage() {
               <span>Max {maxTemperature ?? '--'}°</span>
               <span>Min {minTemperature ?? '--'}°</span>
             </div>
+
+            <TemperatureTrendPanel
+              points={hourlyForecast}
+              temperatureUnit={settings.temperatureUnit}
+              timeFormat={settings.timeFormat}
+            />
+
+            <FiveDayForecastPanel
+              dailyForecast={dailyForecast}
+              temperatureUnit={settings.temperatureUnit}
+            />
           </div>
           <div className="flex flex-col items-center gap-2">
             {statusText && (

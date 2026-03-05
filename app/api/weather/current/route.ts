@@ -7,6 +7,7 @@ export async function GET(request: Request) {
   const q = searchParams.get('q');
   const lat = searchParams.get('lat');
   const lon = searchParams.get('lon');
+  const daysParam = searchParams.get('days');
   const apiKey = process.env.WEATHERAPI_KEY;
 
   if (!apiKey) {
@@ -22,8 +23,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Missing query' }, { status: 400 });
   }
 
+  const parsedDays = Number(daysParam);
+  const days = Number.isFinite(parsedDays)
+    ? Math.max(1, Math.min(7, Math.trunc(parsedDays)))
+    : 1;
+
   const response = await fetch(
-    `${BASE_URL}?key=${apiKey}&q=${encodeURIComponent(query)}&days=1&aqi=no&alerts=no`,
+    `${BASE_URL}?key=${apiKey}&q=${encodeURIComponent(query)}&days=${days}&aqi=no&alerts=no`,
   );
   if (!response.ok) {
     return NextResponse.json({ error: 'Failed' }, { status: 500 });
