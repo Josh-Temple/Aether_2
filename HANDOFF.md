@@ -1,32 +1,30 @@
 # HANDOFF
 
 ## What was completed
-- Refactored home forecast UI into `components/ForecastPanels.tsx` to keep `app/page.tsx` focused on page orchestration.
-- Refactored forecast normalization in `lib/weather.ts` using small parser helpers (`toDailyForecast`, `toHourlyForecast`, `toNumber`, `toString`) for readability and safer fallback handling.
-- Added multi-day forecast support by allowing `days` as a query param in `app/api/weather/current/route.ts` (clamped to 1..7).
-- Updated the client weather fetch path to request `days=5` and normalized daily/hourly forecast payloads in `lib/weather.ts`.
-- Expanded `WeatherSnapshot` in `lib/types.ts` with:
-  - `dailyForecast`
-  - `hourlyForecast`
-- Updated `app/page.tsx` to render:
-  - 24-hour temperature trend chart (SVG line)
-  - 5-day forecast horizontal cards with max/min and rain chance.
-- Updated `README.md` behavior and structure notes for the new top-screen forecast features.
-- Added `.eslintrc.json` so `next lint` runs non-interactively in this environment.
+- Refined the home stage hierarchy in `app/page.tsx` while preserving the original minimal composition:
+  - tightened top/bottom spacing,
+  - improved low-emphasis text readability,
+  - added one concise support line (`Warmer into the afternoon` / `Cooler later today` / `Stable through the day`) derived from the hourly trend,
+  - replaced the weak-only swipe hint with clearer helper copy.
+- Added an always-visible, subtle `Details ›` affordance button in the top-right of the weather stage so users can discover the metadata panel without relying on gestures.
+- Refined forecast readability in `components/ForecastPanels.tsx`:
+  - stronger section-label legibility,
+  - improved card separation with restrained border treatment,
+  - clearer hierarchy for day label, high/low, and rain chance,
+  - gentle emphasis for `Today` and higher-rain days.
+- Refined details drawer density and alignment in `components/DetailsDrawer.tsx`:
+  - expanded abbreviated labels (`Humidity`, `Feels like`, `Visibility`),
+  - added one balancing item (`Cloud cover`),
+  - tightened row spacing,
+  - improved key/value alignment and subtle separators.
+- Added `.details-trigger` style token in `app/globals.css` for a calm, reusable affordance chip style.
+- Updated `README.md` behavior/structure notes to document the persistent details affordance and drawer component role.
 
 ## Validation performed
-- `npm run lint` passes with no ESLint warnings or errors.
-- Manual visual verification performed via Playwright screenshot.
+- `npm run lint` passes.
+- Captured updated UI screenshot via Playwright for visual verification.
 
 ## Notes for next session
-- Current trend chart uses the first forecast day hourly series (up to 24 points).
-- Home forecast rendering logic now lives in `components/ForecastPanels.tsx` to simplify future UI tweaks.
-- Existing cached weather objects from prior versions may not include the new arrays; UI safely falls back to “No hourly data / No forecast data”.
-- If needed, enhance chart readability by adding:
-  - area fill
-  - y-axis labels
-  - min/max markers
-- Optional API expansion:
-  - switch `aqi=no` to `aqi=yes`
-  - switch `alerts=no` to `alerts=yes`
-  and surface these in UI.
+- The new support line is intentionally short and heuristic-based from the first ~8 hours of the hourly forecast; keep it terse if adjusted.
+- If further readability tuning is needed, prefer small opacity/weight increments over palette shifts to preserve the atmospheric look.
+- The details affordance styling is centralized in `.details-trigger` in `app/globals.css`; reuse this token for similarly subtle controls.
