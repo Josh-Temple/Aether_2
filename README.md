@@ -32,6 +32,7 @@ WeatherAPI requests are made server-side via Next.js Route Handlers.
 
 - **Location switching:** Tap the city name to open the location menu. Switching is only via the menu (no swipe switching).
 - **Details drawer gesture:** Swipe left on the main screen to open the right-side details drawer. Swipe right on the drawer or tap outside to close.
+- **Details discoverability:** A subtle `Details ›` affordance is always visible near the top-right so the drawer is discoverable without relying on swipe.
 - **Caching:** Weather data is cached per location for 10 minutes in localStorage. Fresh cache avoids refetching.
 - **Offline fallback:** If a request fails, the app shows the last cached data and an `Offline` indicator. If no cache exists, it shows `No data`.
 - **Saved locations:** Up to 3 saved locations are stored locally with manual up/down reordering.
@@ -45,4 +46,5 @@ WeatherAPI requests are made server-side via Next.js Route Handlers.
 - `lib/normalize.ts` — condition normalization to 6 categories.
 - `lib/storage.ts` — localStorage persistence for locations, settings, cache.
 - `components/ForecastPanels.tsx` — extracted home forecast UI blocks (trend chart and 5-day strip).
+- `components/DetailsDrawer.tsx` — right-side weather metadata drawer with concise key/value rows.
 - `components/*` — UI components (drawer, menu, visuals).

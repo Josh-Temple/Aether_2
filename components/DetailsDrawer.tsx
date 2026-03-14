@@ -19,12 +19,13 @@ export function DetailsDrawer({
   const swipeHandlers = useSwipe(() => undefined, onClose);
   const detailItems = snapshot
     ? [
-        { label: 'Hum', value: `${snapshot.humidity}%` },
+        { label: 'Humidity', value: `${snapshot.humidity}%` },
         { label: 'Wind', value: detailValue(snapshot, settings, 'wind') },
-        { label: 'Feels', value: detailValue(snapshot, settings, 'feels') },
+        { label: 'Feels like', value: detailValue(snapshot, settings, 'feels') },
         { label: 'Rain', value: detailValue(snapshot, settings, 'rain') },
         { label: 'UV', value: `${snapshot.uv}` },
-        { label: 'Vis', value: detailValue(snapshot, settings, 'vis') },
+        { label: 'Visibility', value: detailValue(snapshot, settings, 'vis') },
+        { label: 'Cloud cover', value: `${snapshot.cloud}%` },
       ]
     : [];
 
@@ -38,13 +39,13 @@ export function DetailsDrawer({
       <div className="absolute inset-0 drawer-backdrop" onClick={onClose} />
       <aside
         className={clsx(
-          'absolute right-0 top-0 h-full w-72 bg-black/80 backdrop-blur-xl p-6 transition-transform',
+          'absolute right-0 top-0 h-full w-72 bg-black/82 backdrop-blur-xl px-5 py-6 transition-transform',
           open ? 'translate-x-0' : 'translate-x-full',
         )}
         {...swipeHandlers}
       >
-        <div className="text-xs uppercase tracking-[0.3em] text-white/40">Details</div>
-        <div className="mt-8 grid gap-4">
+        <div className="border-b border-white/10 pb-3 text-xs font-medium uppercase tracking-[0.28em] text-white/58">Details</div>
+        <div className="mt-4 grid gap-3">
           {detailItems.length ? (
             detailItems.map((item) => (
               <DetailItem key={item.label} label={item.label} value={item.value} />
@@ -60,9 +61,9 @@ export function DetailsDrawer({
 
 function DetailItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between text-sm text-white/80">
-      <span className="uppercase tracking-[0.2em] text-[10px] text-white/50">{label}</span>
-      <span className="text-base font-light">{value}</span>
+    <div className="flex items-baseline justify-between gap-3 border-b border-white/5 pb-2 text-sm text-white/85">
+      <span className="uppercase tracking-[0.15em] text-[10px] text-white/62">{label}</span>
+      <span className="text-base font-light text-white/92">{value}</span>
     </div>
   );
 }

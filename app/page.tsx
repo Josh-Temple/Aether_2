@@ -55,6 +55,19 @@ export default function HomePage() {
     : null;
   const dailyForecast = snapshot?.dailyForecast ?? [];
   const hourlyForecast = snapshot?.hourlyForecast ?? [];
+  const supportLine = useMemo(() => {
+    const trendPoints = snapshot?.hourlyForecast ?? [];
+    if (!snapshot || trendPoints.length < 8) return null;
+    const firstPoint = trendPoints[0];
+    const laterPoint = trendPoints[Math.min(8, trendPoints.length - 1)];
+    const firstTemp = settings.temperatureUnit === 'c' ? firstPoint.tempC : firstPoint.tempF;
+    const laterTemp = settings.temperatureUnit === 'c' ? laterPoint.tempC : laterPoint.tempF;
+    const diff = laterTemp - firstTemp;
+
+    if (diff >= 2) return 'Warmer into the afternoon';
+    if (diff <= -2) return 'Cooler later today';
+    return 'Stable through the day';
+  }, [settings.temperatureUnit, snapshot]);
 
   function handleSelectLocation(location: SavedLocation) {
     setMenuOpen(false);
@@ -113,22 +126,34 @@ export default function HomePage() {
         <div className={`weather-stage absolute inset-0 ${themeClass}`}>
           <WeatherVisual category={category} isNight={isNight} />
         </div>
-        <div className={`relative z-10 flex flex-1 flex-col justify-between px-6 py-10 ${textTone}`}>
-          <button
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            className="self-start text-left text-base font-medium"
-          >
-            {activeLabel}
-          </button>
-          <div className="flex flex-col items-center">
+        <div className={`relative z-10 flex flex-1 flex-col justify-between px-6 py-8 ${textTone}`}>
+          <div className="flex items-start justify-between">
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              className="text-left text-base font-medium opacity-95"
+            >
+              {activeLabel}
+            </button>
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(true)}
+              aria-label="Open weather details"
+              className="details-trigger"
+            >
+              <span className="text-[10px] uppercase tracking-[0.18em] opacity-75">Details</span>
+              <span aria-hidden="true" className="text-base leading-none opacity-85">›</span>
+            </button>
+          </div>
+          <div className="-mt-2 flex flex-col items-center">
             <div className="text-6xl font-light">
               {loading && !snapshot ? <div className="skeleton h-16 w-32" /> : temperature}
             </div>
-            <div className="mt-3 text-sm font-medium opacity-70">
+            <div className="mt-3 text-sm font-medium opacity-80">
               {snapshot ? conditionLabel(category) : '...'}
             </div>
-            <div className="mt-5 flex items-center gap-4 text-xs uppercase tracking-[0.3em] opacity-70">
+            {supportLine && <div className="mt-2 text-[11px] uppercase tracking-[0.16em] opacity-65">{supportLine}</div>}
+            <div className="mt-4 flex items-center gap-4 text-xs uppercase tracking-[0.28em] opacity-80">
               <span>Max {maxTemperature ?? '--'}°</span>
               <span>Min {minTemperature ?? '--'}°</span>
             </div>
@@ -146,9 +171,9 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col items-center gap-2">
             {statusText && (
-              <div className={`text-xs uppercase tracking-[0.3em] ${textTone} opacity-60`}>{statusText}</div>
+              <div className={`text-xs uppercase tracking-[0.26em] ${textTone} opacity-70`}>{statusText}</div>
             )}
-            <div className={`text-[10px] uppercase tracking-[0.4em] ${textTone} opacity-30`}>Swipe left</div>
+            <div className={`text-[10px] uppercase tracking-[0.32em] ${textTone} opacity-55`}>Swipe left for details</div>
           </div>
         </div>
       </main>
