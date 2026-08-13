@@ -22,6 +22,7 @@ WEATHERAPI_KEY=your_key_here
 WeatherAPI requests are made server-side via Next.js Route Handlers.
 
 ## Deploy to Vercel
+- Production: https://aether-2.vercel.app/
 
 1. Push the repository to GitHub.
 2. Create a new Vercel project and import the repo.
