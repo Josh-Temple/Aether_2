@@ -25,7 +25,6 @@ export function DetailsDrawer({
         { label: 'Rain', value: detailValue(snapshot, settings, 'rain') },
         { label: 'UV', value: `${snapshot.uv}` },
         { label: 'Visibility', value: detailValue(snapshot, settings, 'vis') },
-        { label: 'Cloud cover', value: `${snapshot.cloud}%` },
       ]
     : [];
 
